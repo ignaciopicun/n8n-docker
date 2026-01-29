@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Configurar variables de entorno para LangWatch
-export NODE_PATH="/home/node/node_modules"
+# Configurar EXTERNAL_HOOK_FILES para LangWatch
+export EXTERNAL_HOOK_FILES=$(node -e "console.log(require.resolve('@langwatch/n8n-observability'))")
+export N8N_OTEL_SERVICE_NAME="${N8N_OTEL_SERVICE_NAME:-n8n}"
 
 # Iniciar n8n con LangWatch
-echo "Starting n8n with LangWatch..."
-exec node /usr/local/lib/node_modules/n8n/bin/n8n
+echo "Starting n8n with LangWatch observability..."
+exec n8n
