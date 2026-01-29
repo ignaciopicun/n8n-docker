@@ -1,0 +1,31 @@
+# render.yaml - Blueprint para despliegue automático en Render
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: n8n-langwatch
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    # Plan: free, starter, standard, pro, etc.
+    plan: free
+    # Región: oregon, frankfurt, ohio, singapore
+    region: oregon
+    # Health check
+    healthCheckPath: /healthz
+    envVars:
+      # Variables requeridas para LangWatch
+      - key: N8N_OTEL_SERVICE_NAME
+        sync: false  # El usuario debe configurar este valor
+      - key: LANGWATCH_API_KEY
+        sync: false  # El usuario debe configurar este valor (secreto)
+      # Variables opcionales de n8n
+      - key: WEBHOOK_URL
+        fromService:
+          type: web
+          name: n8n-langwatch
+          property: host
+        # Se generará automáticamente basado en la URL del servicio
+      - key: GENERIC_TIMEZONE
+        value: America/Mexico_City
+      - key: N8N_METRICS
+        value: "true"
